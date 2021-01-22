@@ -12,11 +12,10 @@ class Xot extends LivingCreature {
     }
 }
 
-
 class Xotaker extends LivingCreature {
     constructor(x, y, index) {
         super(x, y, index);
-        this.energy = 8;
+        this.energy = 3;
     }
     getNewCoordinates() {
         this.directions = [
