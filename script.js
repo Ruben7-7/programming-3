@@ -1,3 +1,7 @@
+//նորից սոքեթը փոխանցիր փոփոխականիդ
+var socket = io();
+
+//էստեղ նախկին սկրիպտ ֆայլիցդ տպում և էստեղ ես բերում setup ֆունկցիան
 let matrix = [];
 let side = 10;
 
@@ -12,14 +16,14 @@ let posArr = [];
 let amkArr = [];
 let amkamkArr = [];
 
+
 function setup() {
     matrixGenerator(80, 1500, 80, 30, 50, 5, 5, 3, 1, 2, 2);
     createCanvas(matrix[0].length * side, matrix.length * side);
     background('grey');
     frameRate(8);
 
-
-    function matrixGenerator(matrixSize, xotCount, xotakerCount, gishCount, killerCount, antarCount, gyuxCount, gomCount, posCount, amkCount ,amksCount) {
+    function matrixGenerator(matrixSize, xotCount, xotakerCount, gishCount, killerCount, antarCount, gyuxCount, gomCount, posCount, amkCount, amksCount) {
         for (let index = 0; index < matrixSize; index++) {
             matrix[index] = [];
             for (let i = 0; i < matrixSize; i++) {
@@ -123,7 +127,7 @@ function setup() {
         }
     }
 }
-function draw() {
+function nkarel() {
 
     for (let y = 0; y < matrix.length; y++) {
         const element = matrix[y];
@@ -195,4 +199,41 @@ function draw() {
     for (let index = 0; index < amkamkArr.length; index++) {
         amkamkArr[index].mul();
     }
-} 
+}
+
+
+
+// էստեղ բերում դնում ես նախկին սկրիպտ ֆայլիդ draw  ֆունկցիան, սակայն անունը փոխում ես
+// դնում ես օրինաաաաակ նկարել, կամ ուրիշ բան
+// function nkarel(matrix) {
+//     console.log(matrix);
+
+// for (var y = 0; y < matrix.length; y++) {
+//     for (var x = 0; x < matrix[y].length; x++) {
+//         var obj = matrix[y][x];
+//         // ուշադիր եղիր, դու այս տողերը գրելուց դեռ քո մատրիցը օբյեկտներով չես լցրել
+//         //հետևաբար մի գրի obj.index, որովհետև տվյալ տեղում միայն դեռ թիվ է և 
+//         //ըստ այդ թվի դու ուղղակի ուզում ես ներկել մատրիցդ
+//         if (obj == 1) {
+//             fill("green");
+//             rect(x * side, y * side, side, side)
+//         }
+//         else if (obj == 2) {
+//             fill("yellow");
+//             rect(x * side, y * side, side, side);
+//         }
+//     }
+// }
+
+// }
+// քանի որ այժմ չունենք draw ֆունկցիա, որ ավտոմատ կանչվի, այդ պատճառով այն կանչում ենք 
+// setInterval մեթոդի մեջ:
+//էստեղ կլիենտը լսողն է: on մեթոդը լսելով send matrix հրամանը, կատարում է նկարել ֆունկցիան
+// և որպես արգումենտ վերցնում սերվերի մատրիցը լցնելուց հետո գրված emit-ի մատրիցը:
+setInterval(
+    function () {
+        socket.on('send matrix', nkarel)
+    }, 1000
+)
+
+//էստեղ այսքանը, հիմա նորից գնա սերվեր ֆայլ
