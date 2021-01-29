@@ -1,16 +1,22 @@
 //առաջին 10 տողը նույնությամբ գրիր, որպեսզի լոկալհոստ ունենաս
 var express = require('express');
 var app = express();
-var server = require('http').Server(app);
+var server = require('http').createServer(app);
 var io = require('socket.io')(server);
-var fs = require("fs");
+
+var matrix = [];
 
 app.use(express.static("."));
 
 app.get('/', function (req, res) {
-    res.redirect('index.html');
+   res.redirect('index.html');
 });
+
 server.listen(3000);
+
+setInterval(function (){
+    io.sockets.emit('matrix update', matrix);
+}, 1000);
 
 //10
 
@@ -18,7 +24,6 @@ server.listen(3000);
 // ինձ մոտ այն չի գեներացվում,,,քեզ մոտ լաաաավ կլինի , որ գեներացվի
 
 let matrix = [];
-let side = 10;
 
 let xotArr = [];
 let xotakerArr = [];
@@ -62,15 +67,17 @@ let amkamkArr = [];
     //Այժմ լցնենք մատրիցը օբյեկտներով
     //սարքի մի հատ ֆունկցիա օրինակ createObject անունով
     //և էստեղ բեր քո սկրիպտ ֆայլի օբյեկտներով լցնող հատվածը
+    
+
     function createObject(matrix) {
         for (var y = 0; y < matrix.length; y++) {
             for (var x = 0; x < matrix[y].length; x++) {
                 if (matrix[y][x] == 1) {
-                    var gr = new xot(x, y, 1);
+                    var gr = new Xot(x, y, 1);
                     grassArr.push(gr)
                 }
                 else if (matrix[y][x] == 2) {
-                    var grEater = new xotaker(x, y, 2);
+                    var grEater = new Xotaker(x, y, 2);
                     grassEaterArr.push(grEater)
 
                 }
@@ -122,7 +129,7 @@ let amkamkArr = [];
 
     function game() {
         for (var i in xotArr) {
-            xotArr[i].mul()
+            xotArr[i].mul();
         }
         for (var i in xotakerArr) {
             xotakerArr[i].eat();
@@ -165,7 +172,7 @@ let amkamkArr = [];
         for (var i in amkamkArr){
             amkamkArr[i].die();
             amkamkArr[i].mul();
-            }
+        }
         
 
 
