@@ -23,8 +23,82 @@ io.on('connection', function (socket) {
     socket.on("send message", function (data) {
         messages.push(data);
         io.sockets.emit("display message", data);
+
+        console.log('a user connected');
+    });
+    socket.on('lightningEvent', function () {
+        console.log('lightning event');
+
+        object.onclick = function () {
+        }
+
+
+        object.addEventListener("onclick", lightningEvent);
+
+    });
+    socket.on('disconnect', function () {
+        console.log('user disconnected');
     });
 });
+
+function matrixGenerator(matrixSize, xotCount, xotakerCount, gishCount, killerCount, antarCount, gyuxCount, gomCount, posCount, amkCount, amkamkCount) {
+    for (let index = 0; index < matrixSize; index++) {
+        matrix[index] = [];
+        for (let i = 0; i < matrixSize; i++) {
+            matrix[index][i] = 0;
+        }
+    }
+    for (let index = 0; index < xotCount; index++) {
+        let x = Math.floor(random(0, matrixSize));
+        let y = Math.floor(random(0, matrixSize));
+        matrix[y][x] = 1;
+    }
+    for (let index = 0; index < xotakerCount; index++) {
+        let x = Math.floor(random(0, matrixSize));
+        let y = Math.floor(random(0, matrixSize));
+        matrix[y][x] = 2;
+    }
+    for (let index = 0; index < gishCount; index++) {
+        let x = Math.floor(random(0, matrixSize));
+        let y = Math.floor(random(0, matrixSize));
+        matrix[y][x] = 3;
+    }
+    for (let index = 0; index < killerCount; index++) {
+        let x = Math.floor(random(0, matrixSize));
+        let y = Math.floor(random(0, matrixSize));
+        matrix[y][x] = 4;
+    }
+    for (let index = 0; index < antarCount; index++) {
+        let x = Math.floor(random(0, matrixSize));
+        let y = Math.floor(random(0, matrixSize));
+        matrix[y][x] = 5;
+    }
+    for (let index = 0; index < gyuxCount; index++) {
+        let x = Math.floor(random(0, matrixSize));
+        let y = Math.floor(random(0, matrixSize));
+        matrix[y][x] = 6;
+    }
+    for (let index = 0; index < gomCount; index++) {
+        let x = Math.floor(random(0, matrixSize));
+        let y = Math.floor(random(0, matrixSize));
+        matrix[y][x] = 7;
+    }
+    for (let index = 0; index < posCount; index++) {
+        let x = Math.floor(random(0, matrixSize));
+        let y = Math.floor(random(0, matrixSize));
+        matrix[y][x] = 11;
+    }
+    for (let index = 0; index < amkCount; index++) {
+        let x = Math.floor(random(0, matrixSize));
+        let y = Math.floor(random(0, matrixSize));
+        matrix[y][x] = 15;
+    }
+    for (let index = 0; index < amkamkCount; index++) {
+        let x = Math.floor(random(0, matrixSize));
+        let y = Math.floor(random(0, matrixSize));
+        matrix[y][x] = 16;
+    }
+}
 
 
 setInterval(function () {
@@ -57,6 +131,7 @@ amk = require("./amk")
 amkamk = require("./amkamk")
 
 function createObject(matrix) {
+    matrixGenerator();
     for (var y = 0; y < matrix.length; y++) {
         for (var x = 0; x < matrix[y].length; x++) {
             if (matrix[y][x] == 1) {
@@ -135,69 +210,20 @@ function game() {
     for (let index = 0; index < amkamkArr.length; index++) {
         amkamkArr[index].mul();
     }
-    function matrixGenerator(matrixSize, xotCount, xotakerCount, gishCount, killerCount, antarCount, gyuxCount, gomCount, posCount, amkCount, amkamkCount) {
-        for (let index = 0; index < matrixSize; index++) {
-            matrix[index] = [];
-            for (let i = 0; i < matrixSize; i++) {
-                matrix[index][i] = 0;
-            }
-        }
-        for (let index = 0; index < xotCount; index++) {
-            let x = Math.floor(random(0, matrixSize));
-            let y = Math.floor(random(0, matrixSize));
-            matrix[y][x] = 1;
-        }
-        for (let index = 0; index < xotakerCount; index++) {
-            let x = Math.floor(random(0, matrixSize));
-            let y = Math.floor(random(0, matrixSize));
-            matrix[y][x] = 2;
-        }
-        for (let index = 0; index < gishCount; index++) {
-            let x = Math.floor(random(0, matrixSize));
-            let y = Math.floor(random(0, matrixSize));
-            matrix[y][x] = 3;
-        }
-        for (let index = 0; index < killerCount; index++) {
-            let x = Math.floor(random(0, matrixSize));
-            let y = Math.floor(random(0, matrixSize));
-            matrix[y][x] = 4;
-        }
-        for (let index = 0; index < antarCount; index++) {
-            let x = Math.floor(random(0, matrixSize));
-            let y = Math.floor(random(0, matrixSize));
-            matrix[y][x] = 5;
-        }
-        for (let index = 0; index < gyuxCount; index++) {
-            let x = Math.floor(random(0, matrixSize));
-            let y = Math.floor(random(0, matrixSize));
-            matrix[y][x] = 6;
-        }
-        for (let index = 0; index < gomCount; index++) {
-            let x = Math.floor(random(0, matrixSize));
-            let y = Math.floor(random(0, matrixSize));
-            matrix[y][x] = 7;
-        }
-        for (let index = 0; index < posCount; index++) {
-            let x = Math.floor(random(0, matrixSize));
-            let y = Math.floor(random(0, matrixSize));
-            matrix[y][x] = 11;
-        }
-        for (let index = 0; index < amkCount; index++) {
-            let x = Math.floor(random(0, matrixSize));
-            let y = Math.floor(random(0, matrixSize));
-            matrix[y][x] = 15;
-        }
-        for (let index = 0; index < amkamkCount; index++) {
-            let x = Math.floor(random(0, matrixSize));
-            let y = Math.floor(random(0, matrixSize));
-            matrix[y][x] = 16;
-        }
-        io.sockets.emit("send matrix", matrix);
 
-    }
+    var data = {
+        "matrix": matrix,
+        "weater": weather,
+    };
+
+    io.sockets.emit('matrixUpdate', data);
 }
 
+createObject();
+
 setInterval(game, 1000);
+
+
 
 io.on('connection', function (socket) {
     createObject(matrix);

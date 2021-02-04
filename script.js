@@ -10,7 +10,8 @@ function setup() {
     background('grey');
 }
 function nkarel() {
-
+    var matrix = data.matrix; 
+    console.log(matrix);
     for (let y = 0; y < matrix.length; y++) {
         const element = matrix[y];
         for (let x = 0; x < element.length; x++) {
@@ -53,9 +54,7 @@ function nkarel() {
     }
 }
 
-setInterval(
-    function () {
-        socket.on('send matrix', nkarel)
-    }, 1000
-)
+function lightningEvent() {
+    socket.emit('lightningEvent');
+}
 
