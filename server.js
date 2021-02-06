@@ -4,7 +4,6 @@ var server = require('http').createServer(app);
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
-var matrix = [];
 var fs = require("fs");
 
 app.use(express.static("."));
@@ -17,29 +16,52 @@ app.get('/', function (req, res) {
 server.listen(3000);
 
 io.on('connection', function (socket) {
-    for (var i in messages) {
-        socket.emit("display message", messages[i]);
-    }
-    socket.on("send message", function (data) {
-        messages.push(data);
-        io.sockets.emit("display message", data);
-
-        console.log('a user connected');
-    });
+    createObjects(matrix);
+    console.log('a user connected');
     socket.on('lightningEvent', function () {
-        console.log('lightning event');
-
-        object.onclick = function () {
+        function getRandomInt(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1)) + min; //Максимум и минимум включаются
         }
-
-
-        object.addEventListener("onclick", lightningEvent);
-
+        let tiv1 = getRandomInt(0, 50);
+        console.log("tiv1");
     });
-    socket.on('disconnect', function () {
-        console.log('user disconnected');
+    socket.on('someEvent', function () {
+        console.log('some event happened on server');
+        // ավելացնել լոգիկան թե մատրիցայում ինչ է տեղի ունենում ինչ որ իրադարձության ժամանակ    
     });
 });
+
+matrix = []; // Մատրիցի ստեղծում
+var rows = 50; // Տողերի քանակ
+var columns = 50; // Սյուների քանակ
+
+for (var y = 0; y < rows; y++) {
+    matrix[y] = []; // Մատրիցի նոր տողի ստեղծում
+    for (var x = 0; x < columns; x++) {
+        var a = Math.floor(Math.random() * 100);
+        if (a >= 0 && a < 20) {
+            matrix[y][x] = 0; // Մատրիցի 20 տոկոսը կլինի 0
+        }
+        if (a >= 20 && a < 40) {
+            matrix[y][x] = 1; // Մատրիցի 20 տոկոսը կլինի 1
+        }
+        else if (a >= 40 && a < 60) {
+            matrix[y][x] = 2; // Մատրիցի 10 տոկոսը կլինի 2
+        }
+        else if (a >= 60 && a < 80) {
+            matrix[y][x] = 3; // Մատրիցի 20 տոկոսը կլինի 3
+        }
+        else if (a >= 80 && a < 99) {
+            matrix[y][x] = 4; // Մատրիցի 20 տոկոսը կլինի 4
+        }
+        else if (a >= 99 && a < 100) {
+            matrix[y][x] = 5; // Մատրիցի 10 տոկոսը կլինի 5
+        }
+    }
+}
+
 
 function matrixGenerator(matrixSize, xotCount, xotakerCount, gishCount, killerCount, antarCount, gyuxCount, gomCount, posCount, amkCount, amkamkCount) {
     for (let index = 0; index < matrixSize; index++) {
@@ -211,20 +233,21 @@ function game() {
         amkamkArr[index].mul();
     }
 
-    var data = {
+    var sendData = {
         "matrix": matrix,
-        "weater": weather,
     };
 
-    io.sockets.emit('matrixUpdate', data);
+    console.log(matrix);
+    io.sockets.emit("data", sendData);
 }
 
 createObject();
 
-setInterval(game, 1000);
-
-
-
 io.on('connection', function (socket) {
     createObject(matrix);
 })
+
+for (var i = 0; i >= 1; i++) {
+    if (i = 0) { setInterval(game, 1000); }
+    else if (i = 1) { setInterval(game, 2000); }
+}

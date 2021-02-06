@@ -1,16 +1,17 @@
+var side = 20;
 var socket = io();
-socket.on('matrix update', nkarel)
-
-let matrix = [];
-let side = 10;
+socket.on('data', nkarel)
+var n = 50
+var m = 50
+var matrix = [];
 
 function setup() {
-    matrixGenerator(80, 1500, 80, 30, 50, 5, 5, 3, 1, 2, 2);
-    createCanvas(matrix[0].length * side, matrix.length * side);
-    background('grey');
+    frameRate(1);
+    createCanvas(n * side, m * side);
+    background('#acacac');
 }
-function nkarel() {
-    var matrix = data.matrix; 
+function nkarel(data) {
+    var matrix = data.matrix;
     console.log(matrix);
     for (let y = 0; y < matrix.length; y++) {
         const element = matrix[y];
@@ -57,4 +58,7 @@ function nkarel() {
 function lightningEvent() {
     socket.emit('lightningEvent');
 }
-
+function someEvent() {
+    // Ասել socket-ին որ տեղի ունեցավ someEvent իրադարձությունը
+    socket.emit('someEvent');
+}  
