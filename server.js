@@ -1,206 +1,158 @@
+
 var express = require('express');
 var app = express();
-var server = require('http').createServer(app);
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
-
-var fs = require("fs");
-
+weather = "Winter";
+matrix = [];
 app.use(express.static("."));
 
 app.get('/', function (req, res) {
     res.redirect('index.html');
-    res.redirect('index.html');
 });
-
 server.listen(3000);
 
-io.on('connection', function (socket) {
-    createObjects(matrix);
-    console.log('a user connected');
-    socket.on('lightningEvent', function () {
-        function getRandomInt(min, max) {
-            min = Math.ceil(min);
-            max = Math.floor(max);
-            return Math.floor(Math.random() * (max - min + 1)) + min; //Максимум и минимум включаются
+function setup() {
+    matrixGenerator(80, 1500, 80, 30, 50, 5, 5, 3, 1, 2, 2);
+    // frameRate(8);
+    function matrixGenerator(matrixSize, xotCount, xotakerCount, gishCount, killerCount, antarCount, gyuxCount, gomCount, posCount, amkCount, amksCount) {
+        for (let index = 0; index < matrixSize; index++) {
+            matrix[index] = [];
+            for (let i = 0; i < matrixSize; i++) {
+                matrix[index][i] = 0;
+            }
         }
-        let tiv1 = getRandomInt(0, 50);
-        console.log("tiv1");
-    });
-    socket.on('someEvent', function () {
-        console.log('some event happened on server');
-        // ավելացնել լոգիկան թե մատրիցայում ինչ է տեղի ունենում ինչ որ իրադարձության ժամանակ    
-    });
-});
-
-matrix = []; // Մատրիցի ստեղծում
-var rows = 50; // Տողերի քանակ
-var columns = 50; // Սյուների քանակ
-
-for (var y = 0; y < rows; y++) {
-    matrix[y] = []; // Մատրիցի նոր տողի ստեղծում
-    for (var x = 0; x < columns; x++) {
-        var a = Math.floor(Math.random() * 100);
-        if (a >= 0 && a < 20) {
-            matrix[y][x] = 0; // Մատրիցի 20 տոկոսը կլինի 0
+        for (let index = 0; index < xotCount; index++) {
+            let x = Math.floor(getRandomInt(0, matrixSize));
+            let y = Math.floor(getRandomInt(0, matrixSize));
+            matrix[y][x] = 1;
         }
-        if (a >= 20 && a < 40) {
-            matrix[y][x] = 1; // Մատրիցի 20 տոկոսը կլինի 1
+        for (let index = 0; index < xotakerCount; index++) {
+            let x = Math.floor(getRandomInt(0, matrixSize));
+            let y = Math.floor(getRandomInt(0, matrixSize));
+            matrix[y][x] = 2;
         }
-        else if (a >= 40 && a < 60) {
-            matrix[y][x] = 2; // Մատրիցի 10 տոկոսը կլինի 2
+        for (let index = 0; index < gishCount; index++) {
+            let x = Math.floor(getRandomInt(0, matrixSize));
+            let y = Math.floor(getRandomInt(0, matrixSize));
+            matrix[y][x] = 3;
         }
-        else if (a >= 60 && a < 80) {
-            matrix[y][x] = 3; // Մատրիցի 20 տոկոսը կլինի 3
+        for (let index = 0; index < killerCount; index++) {
+            let x = Math.floor(getRandomInt(0, matrixSize));
+            let y = Math.floor(getRandomInt(0, matrixSize));
+            matrix[y][x] = 4;
         }
-        else if (a >= 80 && a < 99) {
-            matrix[y][x] = 4; // Մատրիցի 20 տոկոսը կլինի 4
+        for (let index = 0; index < antarCount; index++) {
+            let x = Math.floor(getRandomInt(0, matrixSize));
+            let y = Math.floor(getRandomInt(0, matrixSize));
+            matrix[y][x] = 5;
         }
-        else if (a >= 99 && a < 100) {
-            matrix[y][x] = 5; // Մատրիցի 10 տոկոսը կլինի 5
+        for (let index = 0; index < gyuxCount; index++) {
+            let x = Math.floor(getRandomInt(0, matrixSize));
+            let y = Math.floor(getRandomInt(0, matrixSize));
+            matrix[y][x] = 6;
+        }
+        for (let index = 0; index < gomCount; index++) {
+            let x = Math.floor(getRandomInt(0, matrixSize));
+            let y = Math.floor(getRandomInt(0, matrixSize));
+            matrix[y][x] = 7;
+        }
+        for (let index = 0; index < posCount; index++) {
+            let x = Math.floor(getRandomInt(0, matrixSize));
+            let y = Math.floor(getRandomInt(0, matrixSize));
+            matrix[y][x] = 11;
+        }
+        for (let index = 0; index < amkCount; index++) {
+            let x = Math.floor(getRandomInt(0, matrixSize));
+            let y = Math.floor(getRandomInt(0, matrixSize));
+            matrix[y][x] = 15;
+        }
+        for (let index = 0; index < amksCount; index++) {
+            let x = Math.floor(getRandomInt(0, matrixSize));
+            let y = Math.floor(getRandomInt(0, matrixSize));
+            matrix[y][x] = 16;
         }
     }
+    let data = {
+        "matrix": matrix,
+        "weather": weather
+    };
+    io.sockets.emit("send data", data);
 }
 
 
-function matrixGenerator(matrixSize, xotCount, xotakerCount, gishCount, killerCount, antarCount, gyuxCount, gomCount, posCount, amkCount, amkamkCount) {
-    for (let index = 0; index < matrixSize; index++) {
-        matrix[index] = [];
-        for (let i = 0; i < matrixSize; i++) {
-            matrix[index][i] = 0;
-        }
-    }
-    for (let index = 0; index < xotCount; index++) {
-        let x = Math.floor(random(0, matrixSize));
-        let y = Math.floor(random(0, matrixSize));
-        matrix[y][x] = 1;
-    }
-    for (let index = 0; index < xotakerCount; index++) {
-        let x = Math.floor(random(0, matrixSize));
-        let y = Math.floor(random(0, matrixSize));
-        matrix[y][x] = 2;
-    }
-    for (let index = 0; index < gishCount; index++) {
-        let x = Math.floor(random(0, matrixSize));
-        let y = Math.floor(random(0, matrixSize));
-        matrix[y][x] = 3;
-    }
-    for (let index = 0; index < killerCount; index++) {
-        let x = Math.floor(random(0, matrixSize));
-        let y = Math.floor(random(0, matrixSize));
-        matrix[y][x] = 4;
-    }
-    for (let index = 0; index < antarCount; index++) {
-        let x = Math.floor(random(0, matrixSize));
-        let y = Math.floor(random(0, matrixSize));
-        matrix[y][x] = 5;
-    }
-    for (let index = 0; index < gyuxCount; index++) {
-        let x = Math.floor(random(0, matrixSize));
-        let y = Math.floor(random(0, matrixSize));
-        matrix[y][x] = 6;
-    }
-    for (let index = 0; index < gomCount; index++) {
-        let x = Math.floor(random(0, matrixSize));
-        let y = Math.floor(random(0, matrixSize));
-        matrix[y][x] = 7;
-    }
-    for (let index = 0; index < posCount; index++) {
-        let x = Math.floor(random(0, matrixSize));
-        let y = Math.floor(random(0, matrixSize));
-        matrix[y][x] = 11;
-    }
-    for (let index = 0; index < amkCount; index++) {
-        let x = Math.floor(random(0, matrixSize));
-        let y = Math.floor(random(0, matrixSize));
-        matrix[y][x] = 15;
-    }
-    for (let index = 0; index < amkamkCount; index++) {
-        let x = Math.floor(random(0, matrixSize));
-        let y = Math.floor(random(0, matrixSize));
-        matrix[y][x] = 16;
-    }
-}
+xotArr = [];
+xotakerArr = [];
+gishArr = [];
+killerArr = [];
+antarArr = [];
+gyuxArr = [];
+gomArr = [];
+posArr = [];
+amkArr = [];
+amkamkArr = [];
+
+Xot = require("./Creatures/Xot.js")
+Xotaker = require("./Creatures/Xotaker.js")
+Gish = require("./Creatures/Gish.js")
+Killer = require("./Creatures/Killer.js")
+Gom = require("./Creatures/Gom.js")
+Gyux = require("./Creatures/Gyux.js")
+Antar = require("./Creatures/Antar.js")
+Pos = require("./Creatures/Pos.js")
+Amk = require("./Creatures/Amk.js")
+Amkamk = require("./Creatures/Amkamk.js")
 
 
-setInterval(function () {
-    io.sockets.emit('matrix update', matrix);
-}, 1000);
-
-let matrix = [];
-
-let xotArr = [];
-let xotakerArr = [];
-let gishArr = [];
-let killerArr = [];
-let antarArr = [];
-let gyuxArr = [];
-let gomArr = [];
-let posArr = [];
-let amkArr = [];
-let amkamkArr = [];
-
-io.sockets.emit('send matrix', matrix);
-
-Xot = require("./Xot")
-Xotaker = require("./Xotaker")
-gish = require("./gish")
-killer = require("./killer")
-antar = require("./antar")
-gyux = require("./gyux")
-gom = require("./gom")
-amk = require("./amk")
-amkamk = require("./amkamk")
-
-function createObject(matrix) {
-    matrixGenerator();
+function createObject() {
     for (var y = 0; y < matrix.length; y++) {
-        for (var x = 0; x < matrix[y].length; x++) {
-            if (matrix[y][x] == 1) {
-                var gr = new xot(x, y, 1);
-                grassArr.push(gr);
-            }
-            else if (matrix[y][x] == 2) {
-                var grEater = new xotaker(x, y, 2);
-                grassEaterArr.push(grEater);
-
-            }
-            else if (matrix[y][x] == 3) {
-                let gish = new Gish(x, y);
-                gishArr.push(gish);
-            }
-            else if (matrix[y][x] == 4) {
-                let killer = new Killer(x, y);
-                killerArr.push(killer);
-            }
-            else if (matrix[y][x] == 5) {
-                let antar = new Antar(x, y);
-                antarArr.push(antar);
-            }
-            else if (matrix[y][x] == 6) {
-                let gyux = new Gyux(x, y);
-                gyuxArr.push(gyux);
-            }
-            else if (matrix[y][x] == 7) {
-                let gom = new Gom(x, y);
-                gomArr.push(gom);
-            }
-            else if (matrix[y][x] == 11) {
-                let pos = new Pos(x, y);
-                posArr.push(pos);
-            }
-            else if (matrix[y][x] == 15) {
-                let amk = new Amk(x, y);
-                amkArr.push(amk);
-            }
-            else if (matrix[y][x] == 16) {
-                let amks = new Amkamk(x, y);
-                amkamkArr.push(amks);
+        for (let y = 0; y < matrix.length; y++) {
+            for (let x = 0; x < matrix[y].length; x++) {
+                if (matrix[y][x] == 1) {
+                    let xot = new Xot(x, y);
+                    xotArr.push(xot);
+                }
+                else if (matrix[y][x] == 2) {
+                    let xotaker = new Xotaker(x, y);
+                    xotakerArr.push(xotaker);
+                }
+                else if (matrix[y][x] == 3) {
+                    let gish = new Gish(x, y);
+                    gishArr.push(gish);
+                }
+                else if (matrix[y][x] == 4) {
+                    let killer = new Killer(x, y);
+                    killerArr.push(killer);
+                }
+                else if (matrix[y][x] == 5) {
+                    let antar = new Antar(x, y);
+                    antarArr.push(antar);
+                }
+                else if (matrix[y][x] == 6) {
+                    let gyux = new Gyux(x, y);
+                    gyuxArr.push(gyux);
+                }
+                else if (matrix[y][x] == 7) {
+                    let gom = new Gom(x, y);
+                    gomArr.push(gom);
+                }
+                else if (matrix[y][x] == 11) {
+                    let pos = new Pos(x, y);
+                    posArr.push(pos);
+                }
+                else if (matrix[y][x] == 15) {
+                    let amk = new Amk(x, y);
+                    amkArr.push(amk);
+                }
+                else if (matrix[y][x] == 16) {
+                    let amks = new Amkamk(x, y);
+                    amkamkArr.push(amks);
+                }
             }
         }
     }
-    io.sockets.emit('send matrix', matrix);
 }
+
 function game() {
     for (let index = 0; index < xotArr.length; index++) {
         xotArr[index].mul();
@@ -233,21 +185,116 @@ function game() {
         amkamkArr[index].mul();
     }
 
-    var sendData = {
+    let data = {
         "matrix": matrix,
+        "weather": weather
     };
-
-    console.log(matrix);
-    io.sockets.emit("data", sendData);
+    io.sockets.emit("send data", data);
 }
 
+setup();
 createObject();
+setInterval(game, 1000);
 
 io.on('connection', function (socket) {
-    createObject(matrix);
+    console.log('a user connected');
+    socket.on('weather change', weatherF);
+    socket.on('Event1', function () {
+        console.log("EVENT")
+        let x = getRandomInt(0, matrix[0].length);
+        let y = getRandomInt(0, matrix.length);
+        console.log(matrix[y][x])
+
+
+        for (let index = 0; index < xotArr.length; index++) {
+            if (xotArr[index].x == x && xotArr[index].y == y) {
+                xotArr.splice(index, 1)
+                matrix[y][x] = 0;
+            }
+        }
+        for (let index = 0; index < xotakerArr.length; index++) {
+            if (xotakerArr[index].x == x && xotakerArr[index].y == y) {
+                xotakerArr.splice(index, 1)
+                matrix[y][x] = 0;
+            }
+        }
+        for (let index = 0; index < gishArr.length; index++) {
+            if (gishArr[index].x == x && gishArr[index].y == y) { 
+                gishArr.splice(index, 1)
+                matrix[y][x] = 0;
+            }
+        }
+        for (let index = 0; index < killerArr.length; index++) {
+            if (killerArr[index].x == x && killerArr[index].y == y) {
+                killerArr.splice(index, 1)
+                matrix[y][x] = 0;
+            }
+        }
+        for (let index = 0; index < gomArr.length; index++) {
+            if (gomArr[index].x == x && gomArr[index].y == y) {
+                gomArr.splice(index, 1)
+                matrix[y][x] = 0;
+            }
+        }
+        for (let index = 0; index < amkArr.length; index++) {
+            if (amkArr[index].x == x && amkArr[index].y == y) {
+                amkArr.splice(index, 1)
+                matrix[y][x] = 0;
+            }
+        }
+        for (let index = 0; index < amkamkArr.length; index++) {
+            if (amkamkArr[index].x == x && amkamkArr[index].y == y) { 
+                amkamkArr.splice(index, 1)
+                matrix[y][x] = 0;
+            }
+        }
+        for (let index = 0; index < antarArr.length; index++) {
+            if (antarArr[index].x == x && antarArr[index].y == y) {
+                antarArr.splice(index, 1)
+                matrix[y][x] = 0;
+            }
+        }
+        for (let index = 0; index < gyuxArr.length; index++) {
+            if (gyuxArr[index].x == x && gyuxArr[index].y == y) {
+                gyuxArr.splice(index, 1)
+                matrix[y][x] = 0;
+            }
+        }
+        for (let index = 0; index < posArr.length; index++) {
+            if (posArr[index].x == x && posArr[index].y == y) {
+                posArr.splice(index, 1)
+                matrix[y][x] = 0;
+            }
+        }
+        data = {
+        "matrix": matrix,
+        "weather": weather
+        };
+        io.sockets.emit("send data", data);
+    });
+
+    socket.on('disconnect', function () {
+        console.log('user disconnected');
+    });
 })
 
-for (var i = 0; i >= 1; i++) {
-    if (i = 0) { setInterval(game, 1000); }
-    else if (i = 1) { setInterval(game, 2000); }
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min) + min);
+}
+
+function getRandomArrayElement(arr) {
+    let randomIndex = Math.floor(Math.random() * arr.length);
+    let randomElement = arr[randomIndex];
+    return randomElement;
+}
+
+function weatherF(name) {
+    weather = name;
+    data = {
+        "matrix": matrix,
+        "weather": name
+        };
+        io.sockets.emit("send data", data);
 }
