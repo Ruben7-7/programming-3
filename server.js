@@ -3,7 +3,7 @@ var express = require('express');
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
-weather = "Winter";
+weather = "Zmer";
 matrix = [];
 app.use(express.static("."));
 
@@ -14,7 +14,6 @@ server.listen(3000);
 
 function setup() {
     matrixGenerator(80, 1500, 80, 30, 50, 5, 5, 3, 1, 2, 2);
-    // frameRate(8);
     function matrixGenerator(matrixSize, xotCount, xotakerCount, gishCount, killerCount, antarCount, gyuxCount, gomCount, posCount, amkCount, amksCount) {
         for (let index = 0; index < matrixSize; index++) {
             matrix[index] = [];
@@ -219,7 +218,7 @@ io.on('connection', function (socket) {
             }
         }
         for (let index = 0; index < gishArr.length; index++) {
-            if (gishArr[index].x == x && gishArr[index].y == y) { 
+            if (gishArr[index].x == x && gishArr[index].y == y) {
                 gishArr.splice(index, 1)
                 matrix[y][x] = 0;
             }
@@ -243,7 +242,7 @@ io.on('connection', function (socket) {
             }
         }
         for (let index = 0; index < amkamkArr.length; index++) {
-            if (amkamkArr[index].x == x && amkamkArr[index].y == y) { 
+            if (amkamkArr[index].x == x && amkamkArr[index].y == y) {
                 amkamkArr.splice(index, 1)
                 matrix[y][x] = 0;
             }
@@ -267,8 +266,8 @@ io.on('connection', function (socket) {
             }
         }
         data = {
-        "matrix": matrix,
-        "weather": weather
+            "matrix": matrix,
+            "weather": weather
         };
         io.sockets.emit("send data", data);
     });
@@ -295,6 +294,6 @@ function weatherF(name) {
     data = {
         "matrix": matrix,
         "weather": name
-        };
-        io.sockets.emit("send data", data);
+    };
+    io.sockets.emit("send data", data);
 }
